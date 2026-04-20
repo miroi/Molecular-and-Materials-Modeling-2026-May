@@ -2,12 +2,9 @@
 N2 dissociation energy with ASE
 ===============================
 
-run
----
+python N2_atomiz_energy_EMT.py > N2_atomiz_energy_EMT.py_logfile
+python N2_atomiz_energy_CHGNet.py > N2_atomiz_energy_CHGNet.py_logfile
 
-python atomiz_energy_optimalN2.py > atomiz_energy_optimalN2.py_logfile
 
-challenge
----------
 
 
