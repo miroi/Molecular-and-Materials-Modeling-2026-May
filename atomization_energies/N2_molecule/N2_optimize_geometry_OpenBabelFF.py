@@ -37,6 +37,7 @@ def ase_to_pybel(ase_atoms):
 
 d = 1.1 # this is the N2 experimental bond length (in Angs)
 N2_molecule_ase = Atoms('2N', [(0., 0., 0.), (0., 0., d)])
+N2_molecule_pybel = ase_to_pybel(N2_molecule_ase)
 
 # List available force fields
 print("\nList of openbabel FFs :",pybel.forcefields,"\n")
