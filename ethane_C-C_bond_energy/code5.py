@@ -90,7 +90,7 @@ def main():
 
     # 1. Run OpenBabel Force Fields
     if pybel:
-        for ff in ["mmff94", "uff"]:
+        for ff in ["mmff94", "uff", "ghemical"]:
             print(f"Running OpenBabel {ff}...")
             try:
                 bde, dist = run_openbabel_ff(ff)
