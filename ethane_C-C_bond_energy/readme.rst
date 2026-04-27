@@ -2,6 +2,8 @@
 Ethane C-C bond energy with ASE
 ===============================
 
+see codes construction in https://share.google/aimode/nJUzk4Gqx6YMnO99N
+
 The C-C bond dissociation energy in ethane is cca 348-377 kJ/mol.
 Experimental BDE: Approximately 376 kJ/mol
 
