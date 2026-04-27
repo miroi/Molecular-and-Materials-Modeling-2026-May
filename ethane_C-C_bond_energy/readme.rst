@@ -3,22 +3,20 @@ Ethane C-C bond energy with ASE
 ===============================
 
 The C-C bond dissociation energy in ethane is cca 348-377 kJ/mol.
-
-It is calculated by comparing the total energy of optimized ethane with two methyl radicals,
-often using methods like DFT (e.g., B3LYP) or CCSD(T) with basis sets like cc-pVTZ. 
+Experimental BDE: Approximately 376 kJ/mol
 
 The C-C equilibrium bond length is 1.53-1.54 A.
+Experimental C-C Bond Length: Typically cited at 1.522–1.54 Å.
 
 run
 ---
-python ethane_CC_bond_en.py
-Ethane Energy: 1.4622 eV
-Optimized C-C bond length in ethane: 1.0096 Å
-Methyl Radical Energy: 1.8106 eV
-------------------------------
-Calculated C-C Bond Energy: 2.1591 eV
-Calculated C-C Bond Energy: 208.32 kJ/mol
-------------------------------
+python code3.py
+
+Method       | BDE (kJ/mol)    | C-C Length (Å)
+------------------------------------------------
+EMT          | 208.32          | 1.0089
+CHGNet       | 314.79          | 1.5351
+MACE         | 360.37          | 1.5203
 
 
 Avogadro try
@@ -31,5 +29,4 @@ UFF        0.811     0
 challenge
 ---------
 modify the program to compute C-H bond energy in methane (form the reaction of CH4 -> CH3. + .H)
-
 
