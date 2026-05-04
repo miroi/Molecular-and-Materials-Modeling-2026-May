@@ -30,4 +30,8 @@ water
 -----
 https://aiqm.github.io/torchani/examples_autogen/vibration_analysis.html
 
+PROBLEM: code crashing !!!
+
+python code01.py
+
 
