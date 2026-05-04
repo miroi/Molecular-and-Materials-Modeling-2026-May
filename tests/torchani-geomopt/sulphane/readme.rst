@@ -6,7 +6,6 @@ with Torch ANI
 
 https://share.google/aimode/8kOk2JnPsy69gVXBi
 
-
 (venv) milias@DESKTOP-7OTLCGO:~/work/projects/Molecular-and-Materials-Modeling-2026-May/tests/torchani-geomopt/sulphane/.python code02.py
 /home/milias/work/software/venv/lib/python3.12/site-packages/torchani/csrc/__init__.py:56: UserWarning: The extensions: ['cuaev', 'mnp', 'cell_list'] are not installed and will not be available. To install the extensions first install the CUDA Toolkit, and afterwards  run `ani build-extensions` To suppress warn set the env var TORCHANI_NO_WARN_EXTENSIONS=1 For example, if using bash, you may add `export TORCHANI_NO_WARN_EXTENSIONS=1` to your .bashrc
   warnings.warn(
@@ -45,5 +44,7 @@ Entropy (S)               |   205.54 J/K |   205.81 J/K |   0.13%
 Heat Capacity (Cp)        |    33.92 J/K |    34.23 J/K |   0.91%
 Zero Point Energy (ZPE)   |    41.49 kJ  |    41.71 kJ  |   0.53%
 ======================================================================
+
+https://share.google/aimode/dk0PZ3IzRFitlYOwo
 
 Those are excellent results! An error of 0.13% for Entropy and 0.91% for Heat Capacity is remarkably high precision for a neural network potential. It shows that ANI-2x captures the molecular geometry and the curvature of the potential energy surface (which dictates the vibrations) very accurately for \(H_{2}S\).
