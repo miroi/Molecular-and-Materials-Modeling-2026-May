@@ -26,3 +26,8 @@ Installing collected packages: asciitree, wrapt, triton, shellingham, pyarrow, n
       Successfully uninstalled torch-2.10.0
 Successfully installed annotated-doc-0.0.4 anyio-4.13.0 asciitree-0.3.3 click-8.3.3 deprecated-1.3.1 fasteners-0.20 h11-0.16.0 hf-xet-1.4.3 httpcore-1.0.9 httpx-0.28.1 huggingface_hub-1.13.0 markdown-it-py-4.0.0 mdurl-0.1.2 ninja-1.13.0 numcodecs-0.15.1 nvidia-nccl-cu12-2.27.3 pyarrow-24.0.0 rich-15.0.0 shellingham-1.5.4 torch-2.8.0 torchani-2.7.9 triton-3.4.0 typer-0.25.1 wrapt-2.1.2 zarr-2.18.7
 
+water
+-----
+https://aiqm.github.io/torchani/examples_autogen/vibration_analysis.html
+
+
