@@ -1,3 +1,4 @@
+==========================================
 Molecular and Materials Modeling, May 2026
 ==========================================
 
@@ -7,6 +8,3 @@ including machine-learned (ML-IP).
 Working files.
 
 
-Other themes:
-
-methane combustion:  https://share.google/aimode/Pkvq33BqSQZhAbkvP
