@@ -10,3 +10,5 @@ H2 potential curve
 
 04 GoogleAI:  Add computing the H2 molecule dissociation energy and compare it with the experimental value (code04.py)
 
+05 GoogleAI: try TorchANI ...
+
