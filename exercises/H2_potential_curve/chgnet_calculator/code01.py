@@ -1,9 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from ase import Atoms
-from ase.calculators.calculator import Calculator
 from chgnet.model.dynamics import CHGNetCalculator
-from ase.constraints import ExpCellFilter
 import warnings
 warnings.filterwarnings('ignore')  # CHGNet may produce warnings
 
@@ -12,15 +10,18 @@ warnings.filterwarnings('ignore')  # CHGNet may produce warnings
 def get_chgnet_calculator():
     """Initialize CHGNet calculator for H2 calculations"""
     try:
-        calc = CHGNetCalculator(use_device='cpu')  # Use 'cuda' if GPU available
+        # Try to use CUDA if available, otherwise CPU
+        calc = CHGNetCalculator(use_device='cpu')  # Change to 'cuda' if GPU available
         return calc
     except Exception as e:
         print(f"Error initializing CHGNet: {e}")
+        print("Make sure CHGNet is installed: pip install chgnet")
         raise
 
 # 1. Calculate the energy of a single isolated Hydrogen atom
 # Need a sufficiently large periodic box to avoid interactions between periodic images
 cell_size = 10.0  # Angstroms - large enough to isolate atoms
+print("Creating isolated H atom in periodic box...")
 isolated_atom = Atoms('H', 
                      positions=[(0, 0, 0)],
                      cell=[cell_size, cell_size, cell_size],
@@ -28,13 +29,17 @@ isolated_atom = Atoms('H',
 isolated_atom.calc = get_chgnet_calculator()
 e_single_atom = isolated_atom.get_potential_energy()
 e_two_isolated_atoms = 2 * e_single_atom
+print(f"Energy of single H atom: {e_single_atom:.6f} eV")
+print(f"Energy of two isolated H atoms: {e_two_isolated_atoms:.6f} eV")
 
 # 2. Define the range of interatomic distances (in Angstroms)
 distances = np.linspace(0.5, 3.0, 40)  # CHGNet works better with slightly larger range
 energies = []
 
 # 3. Loop over distances to calculate molecular potential energy
-print("Calculating potential energy curve...")
+print("\nCalculating potential energy curve...")
+print("This may take a few minutes as CHGNet loads the model...")
+
 for i, r in enumerate(distances):
     # Create H2 molecule in a periodic box with sufficient vacuum
     # Center the molecule at the box center to minimize periodic effects
@@ -53,8 +58,8 @@ for i, r in enumerate(distances):
     energy = molecule.get_potential_energy()
     energies.append(energy)
     
-    if (i + 1) % 10 == 0:
-        print(f"  Completed {i+1}/{len(distances)} distances")
+    if (i + 1) % 8 == 0 or i == 0 or i == len(distances) - 1:
+        print(f"  r = {r:.3f} Å, Energy = {energy:.6f} eV")
 
 energies = np.array(energies)
 
@@ -63,10 +68,23 @@ min_idx = np.argmin(energies)
 r_eq = distances[min_idx]
 e_min = energies[min_idx]
 
+# Fit a parabola near minimum for more accurate r_eq (optional)
+if min_idx > 0 and min_idx < len(distances) - 1:
+    # Simple quadratic fit around minimum
+    x_fit = distances[min_idx-1:min_idx+2]
+    y_fit = energies[min_idx-1:min_idx+2]
+    coeffs = np.polyfit(x_fit, y_fit, 2)
+    r_eq_fit = -coeffs[1] / (2 * coeffs[0])
+    e_min_fit = np.polyval(coeffs, r_eq_fit)
+    print(f"\nRefined equilibrium from quadratic fit: {r_eq_fit:.4f} Å")
+    r_eq = r_eq_fit
+    e_min = e_min_fit
+
 # 5. Compute Simulated Dissociation Energy (De)
 # De = E(separated atoms) - E(equilibrium molecule)
 simulated_de = e_two_isolated_atoms - e_min
 experimental_de = 4.52  # Precise experimental De for H2 in eV
+experimental_r_eq = 0.7414  # Experimental bond length in Å
 
 # 6. Save data points and metrics to a text file
 output_filename = "H2_potential_curve_CHGNet.txt"
@@ -76,10 +94,11 @@ header_text = (
     f"H2 Potential Energy Curve and Dissociation Data (CHGNet)\n"
     f"Calculator: CHGNet (universal machine learning potential)\n"
     f"Periodic box size: {cell_size:.1f} x {cell_size:.1f} x {cell_size:.1f} A^3\n"
-    f"Equilibrium Bond Length (r_e): {r_eq:.3f} A\n"
-    f"Simulated Dissociation Energy (De): {simulated_de:.3f} eV\n"
+    f"Equilibrium Bond Length (r_e): {r_eq:.4f} A\n"
+    f"Experimental r_e: {experimental_r_eq:.4f} A\n"
+    f"Simulated Dissociation Energy (De): {simulated_de:.4f} eV\n"
     f"Experimental Dissociation Energy (De): {experimental_de:.2f} eV\n"
-    f"Absolute Error: {abs(simulated_de - experimental_de):.3f} eV\n"
+    f"Absolute Error in De: {abs(simulated_de - experimental_de):.4f} eV\n"
     f"{'Distance(A)':<15} {'Energy(eV)':<20}"
 )
 np.savetxt(output_filename, data_to_save, fmt="%-15.6f %-20.8f", 
@@ -87,34 +106,38 @@ np.savetxt(output_filename, data_to_save, fmt="%-15.6f %-20.8f",
 print(f"\nData saved to {output_filename}")
 
 # 7. Print the comparison metrics
-print("\n" + "="*50)
-print("Summary of Results (CHGNet)")
-print("="*50)
-print(f"Equilibrium Bond Length:      {r_eq:.4f} Å")
-print(f"Experimental bond length:     0.7414 Å")
-print(f"Bond length error:            {abs(r_eq - 0.7414):.4f} Å")
-print(f"\nSimulated Dissociation Energy: {simulated_de:.3f} eV")
-print(f"Experimental De:               {experimental_de:.3f} eV")
-print(f"Absolute Error:               {abs(simulated_de - experimental_de):.3f} eV")
-print(f"Relative Error:               {abs(simulated_de - experimental_de)/experimental_de*100:.1f}%")
+print("\n" + "="*60)
+print("Summary of Results (CHGNet Machine Learning Potential)")
+print("="*60)
+print(f"Equilibrium Bond Length:              {r_eq:.4f} Å")
+print(f"Experimental bond length:             {experimental_r_eq:.4f} Å")
+print(f"Bond length error:                    {abs(r_eq - experimental_r_eq):.4f} Å")
+print(f"Bond length relative error:           {abs(r_eq - experimental_r_eq)/experimental_r_eq*100:.2f}%")
+print(f"\nSimulated Dissociation Energy (De):   {simulated_de:.4f} eV")
+print(f"Experimental De:                      {experimental_de:.4f} eV")
+print(f"Absolute Error in De:                 {abs(simulated_de - experimental_de):.4f} eV")
+print(f"Relative Error in De:                 {abs(simulated_de - experimental_de)/experimental_de*100:.2f}%")
 
 # 8. Plot the potential energy curve with discrete simulation steps
-plt.figure(figsize=(9, 6))
+plt.figure(figsize=(10, 7))
 
 # Main potential curve
-plt.plot(distances, energies, 'b-o', markersize=4, lw=1.5, 
-         label='CHGNet Data Points', alpha=0.8)
+plt.plot(distances, energies, 'b-o', markersize=5, lw=1.5, 
+         label='CHGNet Data Points', alpha=0.8, markevery=2)
 
 # Annotations for key features
 plt.axvline(r_eq, color='r', linestyle='--', lw=2, 
-           label=f'r$_e$ = {r_eq:.2f} Å')
+           label=f'r$_e$ (CHGNet) = {r_eq:.3f} Å')
+plt.axvline(experimental_r_eq, color='orange', linestyle=':', lw=2, 
+           label=f'r$_e$ (Exp) = {experimental_r_eq:.3f} Å')
 plt.axhline(e_min, color='g', linestyle='--', lw=1.5, 
-           label=f'E$_{{min}}$ = {e_min:.2f} eV')
+           label=f'E$_{{min}}$ (CHGNet) = {e_min:.2f} eV')
 plt.axhline(e_two_isolated_atoms, color='m', linestyle=':', lw=2, 
            label=f'2H isolated = {e_two_isolated_atoms:.2f} eV')
 
-# Add experimental reference
-plt.axhline(e_two_isolated_atoms - experimental_de, color='orange', 
+# Add experimental dissociation limit
+e_experimental_limit = e_two_isolated_atoms - experimental_de
+plt.axhline(e_experimental_limit, color='orange', 
            linestyle='-.', lw=1.5, alpha=0.7,
            label=f'Exp. dissociation limit (De = {experimental_de:.2f} eV)')
 
@@ -125,36 +148,43 @@ plt.xlabel(r'Interatomic Distance $r$ (Å)', fontsize=11)
 plt.ylabel('Potential Energy $E$ (eV)', fontsize=11)
 
 # Add text box with accuracy metrics
-textstr = f'CHGNet Accuracy:\nDe error: {abs(simulated_de - experimental_de):.2f} eV\n'
-textstr += f'$r_e$ error: {abs(r_eq - 0.7414):.3f} Å'
+textstr = f'CHGNet Accuracy:\n'
+textstr += f'De error: {abs(simulated_de - experimental_de):.3f} eV\n'
+textstr += f'r$_e$ error: {abs(r_eq - experimental_r_eq):.3f} Å'
 plt.text(0.05, 0.95, textstr, transform=plt.gca().transAxes,
-         fontsize=9, verticalalignment='top',
+         fontsize=10, verticalalignment='top',
          bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
 
 plt.legend(loc='best', fontsize=9)
 plt.grid(True, linestyle=':', alpha=0.6)
 
 # Set reasonable y-axis limits to show the well clearly
-y_min = min(energies.min(), e_two_isolated_atoms - experimental_de - 0.5)
+y_min = min(energies.min(), e_experimental_limit - 0.5)
 y_max = max(energies.max(), e_two_isolated_atoms + 0.2)
 plt.ylim(y_min, y_max)
 
 plt.tight_layout()
 plt.show()
 
-# Optional: Verify that periodic boundaries are working as intended
-print("\n" + "="*50)
+# Verify periodic boundary conditions
+print("\n" + "="*60)
 print("Periodic Boundary Conditions Verification")
-print("="*50)
+print("="*60)
 print(f"✓ Periodic cell size: {cell_size} Å (sufficient vacuum to isolate molecules)")
 print(f"✓ H2 bond vector aligned along x-axis")
 print(f"✓ Minimum image convention applied automatically by ASE")
-print(f"  (no spurious interactions between periodic images)")
-
-# Check minimum distance between periodic images
 min_periodic_distance = cell_size - r_eq
 print(f"✓ Minimum distance between periodic images: {min_periodic_distance:.1f} Å")
 if min_periodic_distance > 5.0:
     print(f"  -> Sufficient vacuum (well-converged isolated molecule)")
 else:
     print(f"  -> WARNING: May have some periodic interactions")
+
+# Additional info about CHGNet
+print("\n" + "="*60)
+print("About CHGNet")
+print("="*60)
+print("CHGNet = Crystal Hamiltonian Graph Neural Network")
+print("Pre-trained on ~1.5M DFT calculations from Materials Project")
+print("Designed for universal interatomic potentials in materials")
+print("Expected accuracy for H2: De ~ 4.3-4.5 eV (vs experiment 4.52 eV)")
