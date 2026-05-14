@@ -9,7 +9,7 @@ Working files.
 
 To proceed, install these packages within your Python virtual environment:
 
-pip install ase chgnet mace torchani asap3
+pip install ase chgnet mace mace-models torchani asap3
 
 
 
