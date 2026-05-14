@@ -21,3 +21,12 @@ Equilibrium bond length (Å)                0.781        0.741
         Binding energy (eV)                5.150         4.52
     Morse parameter a (Å⁻¹)                2.804            —
 
+extract the vibrational frequency (ωₑ) from the Morse parameters, compare with experiment - write full code
+
+python code03.py
+                    Quantity Computed (EMT/Morse) Experimental
+ Equilibrium bond length (Å)                0.781        0.741
+         Binding energy (eV)                5.150         4.52
+     Morse parameter a (Å⁻¹)                2.804            —
+Vibrational frequency (cm⁻¹)                 6609         4401
+
