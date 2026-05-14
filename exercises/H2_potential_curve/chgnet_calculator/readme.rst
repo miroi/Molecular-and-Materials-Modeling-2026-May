@@ -38,3 +38,6 @@ CHGNet = Crystal Hamiltonian Graph Neural Network
 Pre-trained on ~1.5M DFT calculations from Materials Project
 Designed for universal interatomic potentials in materials
 Expected accuracy for H2: De ~ 4.3-4.5 eV (vs experiment 4.52 eV)
+
+
+morse, EMT does not work..
