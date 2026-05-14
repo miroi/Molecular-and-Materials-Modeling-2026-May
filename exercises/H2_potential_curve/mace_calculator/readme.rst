@@ -53,3 +53,8 @@ H2 Potential Energy Curve with MACE Machine Learning Potential
 ============================================================
 ✓ Calculation completed successfully!
 ============================================================
+
+downloaded model
+----------------
+(venv) milias@DESKTOP-7OTLCGO:~/work/projects/Molecular-and-Materials-Modeling-2026-May/exercises/H2_potential_curve/mace_calculator/.ls data/
+2023-12-10-mace-128-L0_energy_epoch-249.model
