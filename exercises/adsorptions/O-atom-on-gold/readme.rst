@@ -2,6 +2,9 @@
 Adsorption O@Au(111)
 ====================
 
+MS Copilot AI assistance:
+
+
 literature: https://www.sciencedirect.com/science/article/abs/pii/S0039602814001125
 
 code01.py .. EMT, clean slab frozen
@@ -16,4 +19,4 @@ code06.py CHGnet, with CPU or GPU specification
 
 change to MACE calculator:
 
-code07.py 
+code07.py  .. corrected code wrt to errors

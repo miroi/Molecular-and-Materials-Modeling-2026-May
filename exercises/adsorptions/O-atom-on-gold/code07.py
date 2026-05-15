@@ -6,14 +6,14 @@ from ase.io import write
 import numpy as np
 
 # Import MACE calculator
-from mace.calculators import MACECalculator
+from mace.calculators import mace_mp
 
 # --- 0. DEVICE SELECTION ---
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"MACE will run on: {device.upper()}")
 
-# Initialize MACE calculator (use pretrained foundation model)
-calc = MACECalculator(model="foundation", device=device)
+# Initialize MACE calculator (pretrained foundation model)
+calc = mace_mp(device=device)
 
 # --- 1. ISOLATED ADSORBATE ---
 # Place O atom in a small periodic box to satisfy MACE requirements
