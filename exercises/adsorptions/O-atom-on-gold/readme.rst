@@ -7,4 +7,8 @@ literature: https://www.sciencedirect.com/science/article/abs/pii/S0039602814001
 code01.py .. EMT, clean slab frozen
 code02.py .. EMT, clean slab relaxed, better adsorption energy
 code03.py .. EMT, -||-, writing d(O-Ausurf), and converged geometry as vasp file
+code04.py .. EMT, -||- plus writing clean slab as vasp file
+
+change to CHGNet calculator
+
 
