@@ -13,3 +13,7 @@ change to CHGNet calculator
 code05.py
 code06.py CHGnet, with CPU or GPU specification
 
+
+change to MACE calculator:
+
+code07.py 
