@@ -7,6 +7,8 @@ from ase.optimize import BFGS
 
 
 atom = Atoms('N', calculator=EMT())
+
+# energy of the single N atom
 e_atom = atom.get_potential_energy()
 
 d = 1.1 # this is the N2 experimental bond length (in Angs)
