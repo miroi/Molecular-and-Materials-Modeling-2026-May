@@ -10,5 +10,6 @@ code03.py .. EMT, -||-, writing d(O-Ausurf), and converged geometry as vasp file
 code04.py .. EMT, -||- plus writing clean slab as vasp file
 
 change to CHGNet calculator
-
+code05.py
+code06.py CHGnet, with CPU or GPU specification
 
