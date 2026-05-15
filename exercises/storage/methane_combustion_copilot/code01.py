@@ -7,18 +7,15 @@ from ase.md.verlet import VelocityVerlet
 from ase import units
 
 # --- Build initial system ---
-# Methane + Oxygen mixture (CH4 + 2 O2)
 methane = molecule('CH4')
 oxygen1 = molecule('O2')
 oxygen2 = molecule('O2')
-
 system = methane + oxygen1 + oxygen2
-system.center(vacuum=5.0)  # add spacing
+system.center(vacuum=5.0)
 
 # --- Define ReaxFF calculator ---
-# Requires CHO.ff (ffield.reax.cho) in working directory
 calc = LAMMPS(
-    command='/usr/bin/lmp',  # your LAMMPS binary
+    command='/usr/bin/lmp',
     pair_style='reax/c NULL',
     pair_coeff=['* * CHO.ff C H O'],
     fix=['qeq all reax/c 1 0.0 10.0 1e-6 reax/c'],
@@ -41,7 +38,7 @@ def print_energy(a=system):
 dyn.attach(print_energy, interval=10)
 
 print("Starting combustion simulation...")
-dyn.run(5000)  # run 5000 steps
+dyn.run(5000)
 
 # --- Save trajectory ---
 write('combustion.traj', system)
