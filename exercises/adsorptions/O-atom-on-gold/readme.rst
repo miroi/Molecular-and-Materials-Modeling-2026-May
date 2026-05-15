@@ -4,5 +4,7 @@ Adsorption O@Au(111)
 
 literature: https://www.sciencedirect.com/science/article/abs/pii/S0039602814001125
 
-
+code01.py .. EMT, clean slab frozen
+code02.py .. EMT, clean slab relaxed, better adsorption energy
+code03.py .. EMT, -||-, writing d(O-Ausurf), and converged geometry as vasp file
 
